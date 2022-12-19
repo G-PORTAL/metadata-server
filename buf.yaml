@@ -1,0 +1,4 @@
+version: v1
+name: "buf.build/gportal/metadata-server"
+deps:
+  - buf.build/gportal/gportal-cloud

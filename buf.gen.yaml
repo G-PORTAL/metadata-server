@@ -1,0 +1,11 @@
+
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/g-portal/metadata-server/pkg/proto
+plugins:
+  - name: go
+    out: pkg/proto/
+    opt:
+      - paths=source_relative

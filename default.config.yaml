@@ -1,0 +1,6 @@
+---
+
+listen: 0.0.0.0:80
+
+source:
+  type: gpcloud
