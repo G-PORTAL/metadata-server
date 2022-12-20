@@ -3,10 +3,12 @@ package gpcloud
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	grpcclient "github.com/g-portal/metadata-server/pkg/grpc"
 	"github.com/g-portal/metadata-server/pkg/keycloak"
 	metadatav1 "github.com/g-portal/metadata-server/pkg/proto/gpcloud/api/metadata/v1"
 	"github.com/g-portal/metadata-server/pkg/sources"
+	"golang.org/x/crypto/ssh"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"log"
@@ -54,25 +56,75 @@ func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
 		return nil, err
 	}
 
+	if r.Header.Get("X-Forwarded-For") != "" {
+		remoteIP = r.Header.Get("X-Forwarded-For")
+	}
+
 	log.Printf("Remote IP: %s", remoteIP)
 	resp, err := s.GetMetadataClient().GetMetadata(context.Background(), &metadatav1.GetMetadataRequest{
-		IpAddress: "176.57.191.140",
+		IpAddress: remoteIP,
 	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	sshKeys := make(map[string]string)
+	sshKeys := make(map[string]ssh.PublicKey)
 	for _, key := range resp.Metadata.SshKeys {
-		sshKeys[key.Id] = key.PublicKey
+		sshPublicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(key.PublicKey))
+		if err != nil {
+			log.Printf("Failed to parse SSH key: %s", err)
+			continue
+		}
+
+		sshKeys[key.Id] = sshPublicKey
+	}
+
+	nicList := make([]sources.MetadataInterface, 0)
+	routeList := make([]sources.MetadataRoute, 0)
+	for i, networkInterface := range resp.Metadata.Interfaces {
+		var gateway *net.IP
+		if networkInterface.Ipv4.Gateway != nil {
+			gw := net.ParseIP(*networkInterface.Ipv4.Gateway)
+			gateway = &gw
+		}
+
+		_, net, err := net.ParseCIDR(fmt.Sprintf("%s/%v", networkInterface.Ipv4.IpAddress, networkInterface.Ipv4.Prefix))
+		if err != nil {
+			return nil, err
+		}
+
+		subnets := make([]sources.MetadataSubnet, 0)
+		subnets = append(subnets, sources.MetadataSubnet{
+			IPv4:       true,
+			Type:       sources.MetadataSubnetTypeStatic,
+			Address:    net,
+			Gateway:    gateway,
+			DnsServers: resp.Metadata.Dns.Nameservers,
+		})
+
+		routeList = append(routeList, sources.MetadataRoute{})
+		nicList = append(nicList, sources.MetadataInterface{
+			MacAddress: networkInterface.MacAddress,
+			Name:       fmt.Sprintf("eth%d", i),
+			Type:       sources.InterfaceTypePhysical,
+			Subnets:    subnets,
+		})
 	}
 
 	return &sources.Metadata{
-		ID:               resp.Metadata.InstanceId,
-		AvailabilityZone: resp.Metadata.Region,
-		UserData:         []byte(resp.Metadata.UserData),
+		InstanceID:       resp.Metadata.InstanceId,
+		InstanceType:     resp.Metadata.Flavour,
+		PublicHostname:   resp.Metadata.Hostname,
+		LocalHostname:    resp.Metadata.Hostname,
+		AvailabilityZone: &resp.Metadata.AvailabilityZone,
+		UserData:         resp.Metadata.UserData,
+		VendorData:       resp.Metadata.VendorData,
+		VendorData2:      resp.Metadata.VendorData_2,
+		Password:         resp.Metadata.Password,
 		PublicKeys:       sshKeys,
+		Interfaces:       nicList,
+		Routes:           routeList,
 	}, nil
 }
 

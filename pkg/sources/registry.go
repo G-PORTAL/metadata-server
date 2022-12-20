@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/g-portal/metadata-server/pkg/config"
 	"log"
-	"net/http"
 	"sync"
 )
 
@@ -13,16 +12,6 @@ type registrationType map[config.SourceType]Source
 var registration = make(registrationType)
 
 var mtx sync.RWMutex
-
-func GetMetadata(r *http.Request) (*Metadata, error) {
-	for _, source := range registration {
-		if result, err := source.GetMetadata(r); err == nil && result != nil {
-			return result, nil
-		}
-	}
-
-	return nil, fmt.Errorf("no matching metadata found")
-}
 
 func Load() ([]Source, error) {
 	mtx.RLock()

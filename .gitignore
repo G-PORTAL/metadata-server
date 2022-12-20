@@ -7,3 +7,4 @@
 
 # Config
 /config.yaml
+/tools/deploy.sh

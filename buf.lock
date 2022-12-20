@@ -4,11 +4,11 @@ deps:
   - remote: buf.build
     owner: googleapis
     repository: googleapis
-    commit: d1263fe26f8e430a967dc22a4d0cad18
+    commit: 75b4300737fb4efca0831636be94e517
   - remote: buf.build
     owner: gportal
     repository: gportal-cloud
-    commit: f32eeea819c04cb8a08f38576dda8d6d
+    commit: 7d97250b6b514251b3fbcdd9335bef2d
   - remote: buf.build
     owner: grpc-ecosystem
     repository: grpc-gateway
