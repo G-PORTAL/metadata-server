@@ -6,7 +6,7 @@ type MetadataKeyDefinition struct {
 	Data string `json:"data"`
 }
 
-type MetaData struct {
+type Metadata struct {
 	UUID             string                  `json:"uuid"`
 	PublicKeys       map[string]string       `json:"public_keys"`
 	Keys             []MetadataKeyDefinition `json:"keys"`

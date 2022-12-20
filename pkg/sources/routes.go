@@ -35,20 +35,20 @@ func (m Metadata) GetRoutes() Routes {
 		routes.registerVersionedOpenStackMetadataRoute("/user-data", render.Data{Data: m.UserData})
 	}
 
-	if m.VendorData != nil {
-		routes.registerOpenStackRoute("/vendor_data.json", render.Data{Data: m.VendorData})
-	}
-
-	if m.VendorData2 != nil {
-		routes.registerOpenStackRoute("/vendor_data2.json", render.Data{Data: m.VendorData2})
-	}
-
 	if m.Password != nil && *m.Password != "" {
 		routes.registerOpenStackRoute("/password", render.String{Format: *m.Password})
 	}
 
 	if len(m.Interfaces) > 0 {
 		routes.registerOpenStackRoute("/network_data.json", m.OpenStackNetworkData())
+	}
+
+	if m.VendorData != nil {
+		routes.registerOpenStackRoute("/vendor_data.json", m.OpenStackVendorData(m.VendorData))
+	}
+
+	if m.VendorData2 != nil {
+		routes.registerOpenStackRoute("/vendor_data2.json", m.OpenStackVendorData(m.VendorData))
 	}
 
 	routes.registerOpenStackRoute("/meta_data.json", m.OpenStackMetaData())

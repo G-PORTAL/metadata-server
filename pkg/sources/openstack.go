@@ -4,6 +4,7 @@ import (
 	"github.com/g-portal/metadata-server/pkg/openstack"
 	"github.com/gin-gonic/gin/render"
 	"golang.org/x/crypto/ssh"
+	"strings"
 )
 
 func (m Metadata) OpenStackNetworkData() render.JSON {
@@ -33,8 +34,10 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 				Type: openstack.NetworkTypeIPv4,
 			}
 
-			if subnet.Address != nil {
+			if subnet.Address != nil && subnet.Network != nil {
 				ip := subnet.Address.String()
+				cidr := strings.Split(subnet.Network.String(), "/")
+				ip += "/" + cidr[1]
 				network.IPAddress = &ip
 			}
 
@@ -57,8 +60,16 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 	}
 }
 
+func (m Metadata) OpenStackVendorData(data []byte) render.JSON {
+	return render.JSON{
+		Data: openstack.VendorData{
+			CloudInit: string(data),
+		},
+	}
+}
+
 func (m Metadata) OpenStackMetaData() render.JSON {
-	metadata := openstack.MetaData{
+	metadata := openstack.Metadata{
 		UUID:        m.InstanceID,
 		Keys:        make([]openstack.MetadataKeyDefinition, 0),
 		PublicKeys:  map[string]string{},

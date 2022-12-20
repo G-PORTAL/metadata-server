@@ -89,7 +89,7 @@ func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
 			gateway = &gw
 		}
 
-		_, net, err := net.ParseCIDR(fmt.Sprintf("%s/%v", networkInterface.Ipv4.IpAddress, networkInterface.Ipv4.Prefix))
+		ip, net, err := net.ParseCIDR(fmt.Sprintf("%s/%v", networkInterface.Ipv4.IpAddress, networkInterface.Ipv4.Prefix))
 		if err != nil {
 			return nil, err
 		}
@@ -98,7 +98,8 @@ func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
 		subnets = append(subnets, sources.MetadataSubnet{
 			IPv4:       true,
 			Type:       sources.MetadataSubnetTypeStatic,
-			Address:    net,
+			Address:    &ip,
+			Network:    net,
 			Gateway:    gateway,
 			DnsServers: resp.Metadata.Dns.Nameservers,
 		})

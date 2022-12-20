@@ -16,7 +16,8 @@ type MetadataSubnet struct {
 	IPv4       bool               `json:"ipv4"`
 	IPv6       bool               `json:"ipv6"`
 	Type       MetadataSubnetType `json:"type"`
-	Address    *net.IPNet         `json:"address,omitempty"`
+	Address    *net.IP            `json:"address,omitempty"`
+	Network    *net.IPNet         `json:"network,omitempty"`
 	Gateway    *net.IP            `json:"gateway,omitempty"`
 	DnsServers []string           `json:"dns_nameservers,omitempty"`
 }
