@@ -2,6 +2,7 @@ package keycloak
 
 import (
 	"context"
+	"fmt"
 	"github.com/Nerzal/gocloak/v12"
 	"log"
 	"sync"
@@ -36,37 +37,36 @@ func NewClientAuthenticationService(url, realm, clientID, clientSecret string) (
 	}
 
 	// Initial refresh
-	if err := service.refresh(); err != nil {
+	if err := service.refresh(context.Background()); err != nil {
 		return nil, err
 	}
 
 	return service, nil
 }
 
-// refresh utility function to generate new JWT tokens (normal refresh logic doesn't apply to this authentication mechanism).
-func (s *ClientAuthenticationService) refresh() error {
+// refresh utility function to generate new JWT tokens.
+func (s *ClientAuthenticationService) refresh(ctx context.Context) error {
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	log.Printf("Refreshing Keycloak Token now.")
-	jwt, err := s.client.GetToken(context.Background(), s.config.realm, gocloak.TokenOptions{
+	var err error
+	if s.jwt, err = s.client.GetToken(ctx, s.config.realm, gocloak.TokenOptions{
 		ClientID:     &s.config.clientID,
 		ClientSecret: &s.config.clientSecret,
 		GrantType:    gocloak.StringP("client_credentials"),
 		Audience:     gocloak.StringP("dasdsdadasd"),
-	})
-	if err != nil {
-		return err
+	}); err != nil {
+		return fmt.Errorf("failed to get token: %w", err)
 	}
-	s.expireTime = time.Now().Add(time.Second * time.Duration(jwt.ExpiresIn-RefreshGracePeriod))
-	s.jwt = jwt
+	s.expireTime = time.Now().Add(time.Second * time.Duration(s.jwt.ExpiresIn-RefreshGracePeriod))
 	return nil
 }
 
 // GetToken returns the always-up-to-date jwt token.
-func (s *ClientAuthenticationService) GetToken() (*gocloak.JWT, error) {
+func (s *ClientAuthenticationService) GetToken(ctx context.Context) (*gocloak.JWT, error) {
 	if s.jwt == nil || s.expireTime.Before(time.Now()) {
-		if err := s.refresh(); err != nil {
+		if err := s.refresh(ctx); err != nil {
 			return nil, err
 		}
 	}

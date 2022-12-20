@@ -13,7 +13,6 @@ import (
 	"google.golang.org/grpc/credentials"
 	"log"
 	"net"
-	"net/http"
 )
 
 const Type = "gpcloud"
@@ -30,17 +29,22 @@ func (s *Source) Type() string {
 func (s *Source) Initialize(cfg sources.SourceConfig) error {
 	s.cfg = cfg
 
-	clientAuth, err := keycloak.NewClientAuthenticationService(cfg.GetString("auth_url"), cfg.GetString("realm"), cfg.GetString("client_id"), cfg.GetString("client_secret"))
+	clientAuth, err := keycloak.NewClientAuthenticationService(
+		cfg.GetString("auth_url"),
+		cfg.GetString("realm"),
+		cfg.GetString("client_id"),
+		cfg.GetString("client_secret"),
+	)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create client authentication service: %w", err)
 	}
 
 	if s.grpcClient, err = grpc.Dial(cfg.GetString("grpc_host"),
-		grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})),
+		grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{MinVersion: tls.VersionTLS13})),
 		grpc.WithPerRPCCredentials(grpcclient.KeycloakClientAuthenticationAuth{
 			Service: clientAuth,
 		})); err != nil {
-		return err
+		return fmt.Errorf("failed to connect to gRPC server %s: %w", cfg.GetString("grpc_host"), err)
 	}
 
 	return nil
@@ -50,23 +54,13 @@ func (s *Source) GetMetadataClient() metadatav1.MetadataServiceClient {
 	return metadatav1.NewMetadataServiceClient(s.grpcClient)
 }
 
-func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
-	remoteIP, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	if r.Header.Get("X-Forwarded-For") != "" {
-		remoteIP = r.Header.Get("X-Forwarded-For")
-	}
-
-	log.Printf("Remote IP: %s", remoteIP)
+func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 	resp, err := s.GetMetadataClient().GetMetadata(context.Background(), &metadatav1.GetMetadataRequest{
-		IpAddress: remoteIP,
+		IpAddress: ip.String(),
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get metadata: %w", err)
 	}
 
 	sshKeys := make(map[string]ssh.PublicKey)
@@ -74,6 +68,7 @@ func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
 		sshPublicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(key.PublicKey))
 		if err != nil {
 			log.Printf("Failed to parse SSH key: %s", err)
+
 			continue
 		}
 
@@ -91,29 +86,31 @@ func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
 
 		ip, net, err := net.ParseCIDR(fmt.Sprintf("%s/%v", networkInterface.Ipv4.IpAddress, networkInterface.Ipv4.Prefix))
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to parse CIDR: %w", err)
 		}
 
 		subnets := make([]sources.MetadataSubnet, 0)
 		subnets = append(subnets, sources.MetadataSubnet{
 			IPv4:       true,
+			IPv6:       false,
 			Type:       sources.MetadataSubnetTypeStatic,
 			Address:    &ip,
 			Network:    net,
 			Gateway:    gateway,
-			DnsServers: resp.Metadata.Dns.Nameservers,
+			DNSServers: resp.Metadata.Dns.Nameservers,
 		})
 
-		routeList = append(routeList, sources.MetadataRoute{})
 		nicList = append(nicList, sources.MetadataInterface{
 			MacAddress: networkInterface.MacAddress,
 			Name:       fmt.Sprintf("eth%d", i),
 			Type:       sources.InterfaceTypePhysical,
 			Subnets:    subnets,
+			AcceptRA:   nil,
 		})
 	}
 
 	return &sources.Metadata{
+		ProjectID:        &resp.Metadata.ProjectId,
 		InstanceID:       resp.Metadata.InstanceId,
 		InstanceType:     resp.Metadata.Flavour,
 		PublicHostname:   resp.Metadata.Hostname,
@@ -130,5 +127,8 @@ func (s *Source) GetMetadata(r *http.Request) (*sources.Metadata, error) {
 }
 
 func init() {
-	sources.Register(Type, &Source{})
+	sources.Register(Type, &Source{
+		cfg:        nil,
+		grpcClient: nil,
+	})
 }

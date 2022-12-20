@@ -1,16 +1,19 @@
 package config
 
 import (
+	"fmt"
 	"github.com/go-yaml/yaml"
 	"os"
 )
 
 const defaultConfigPath = "/etc/metadata-server/config.yaml"
 
-var cfg *config
+var cfg *Config
+
+var errInvalidConfig = fmt.Errorf("invalid config")
 
 func ReloadConfig() error {
-	cfg = &config{}
+	cfg = &Config{}
 	cfg.loadDefaults()
 
 	content, err := getConfigContent()
@@ -19,18 +22,23 @@ func ReloadConfig() error {
 	}
 
 	if err = yaml.UnmarshalStrict(content, cfg); err != nil {
-		return err
+		return errInvalidConfig
 	}
 
 	return nil
 }
 
-func GetConfig() *config {
+func GetConfig() *Config {
 	return cfg
 }
 
 func getConfigContent() ([]byte, error) {
-	return os.ReadFile(getConfigFilePath())
+	data, err := os.ReadFile(getConfigFilePath())
+	if err != nil {
+		return nil, fmt.Errorf("failed to read config file: %w", err)
+	}
+
+	return data, nil
 }
 
 func getConfigFilePath() string {

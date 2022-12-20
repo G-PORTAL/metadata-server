@@ -1,0 +1,41 @@
+---
+
+run:
+  timeout: 30m
+
+  issue-exit-code: 1
+
+  tests: true
+
+  skip-dirs:
+    - pkg/proto
+
+  allow-parallel-runners: true
+
+linters:
+  enable-all: true
+  disable:
+    - gci
+    - gochecknoinits
+    - gofumpt
+    - goimports
+    - gochecknoglobals
+    - nosnakecase
+    - ireturn
+    - exhaustruct
+    - exhaustivestruct
+
+linters-settings:
+  varnamelen:
+    ignore-decls:
+      - ip net.IP
+      - c *gin.Context
+      - r *http.Request
+      - r *gin.Engine
+  funlen:
+    lines: 100
+  tagliatelle:
+    case:
+      rules:
+        json: snake
+        yaml: camel

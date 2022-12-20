@@ -19,7 +19,7 @@ type MetadataSubnet struct {
 	Address    *net.IP            `json:"address,omitempty"`
 	Network    *net.IPNet         `json:"network,omitempty"`
 	Gateway    *net.IP            `json:"gateway,omitempty"`
-	DnsServers []string           `json:"dns_nameservers,omitempty"`
+	DNSServers []string           `json:"dns_nameservers,omitempty"`
 }
 
 type InterfaceType string
@@ -36,7 +36,7 @@ type MetadataInterface struct {
 	Name       string           `json:"name"`
 	Type       InterfaceType    `json:"type"`
 	Subnets    []MetadataSubnet `json:"subnets"`
-	AcceptRA   *bool            `json:"accept-ra,omitempty"`
+	AcceptRA   *bool            `json:"accept-ra,omitempty"` //nolint:tagliatelle // cloud-init metadata requirement
 }
 
 type MetadataRoute struct {
@@ -48,7 +48,7 @@ type MetadataRoute struct {
 type Metadata struct {
 	InstanceID       string                   `json:"id"`
 	ProjectID        *string                  `json:"project_id"`
-	InstanceType     string                   `yaml:"instance_type"`
+	InstanceType     string                   `json:"instance_type"`
 	LocalHostname    string                   `json:"local_hostname"`
 	PublicHostname   string                   `json:"public_hostname"`
 	AvailabilityZone *string                  `json:"availability_zone"`

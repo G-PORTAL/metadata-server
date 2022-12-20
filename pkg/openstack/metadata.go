@@ -20,5 +20,5 @@ type Metadata struct {
 }
 
 type VendorData struct {
-	CloudInit string `json:"cloud-init"`
+	CloudInit string `json:"cloud-init"` //nolint:tagliatelle // cloud-init metadata requirement
 }

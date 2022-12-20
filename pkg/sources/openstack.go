@@ -22,7 +22,7 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 		})
 
 		for _, subnet := range metadataInterface.Subnets {
-			for _, dnsServer := range subnet.DnsServers {
+			for _, dnsServer := range subnet.DNSServers {
 				config.Services = append(config.Services, openstack.Service{
 					Type:    openstack.ServiceTypeDNS,
 					Address: dnsServer,
@@ -52,7 +52,6 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 
 			config.Networks = append(config.Networks, network)
 		}
-
 	}
 
 	return render.JSON{
@@ -79,14 +78,14 @@ func (m Metadata) OpenStackMetaData() render.JSON {
 		RandomSeed:  m.InstanceID, // TODO: do something
 	}
 
-	for id, key := range m.PublicKeys {
+	for keyID, key := range m.PublicKeys {
 		metadata.Keys = append(metadata.Keys, openstack.MetadataKeyDefinition{
-			Name: id,
+			Name: keyID,
 			Type: "ssh",
 			Data: string(ssh.MarshalAuthorizedKey(key)),
 		})
 
-		metadata.PublicKeys[id] = string(ssh.MarshalAuthorizedKey(key))
+		metadata.PublicKeys[keyID] = string(ssh.MarshalAuthorizedKey(key))
 	}
 
 	if m.ProjectID != nil {

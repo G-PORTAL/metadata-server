@@ -1,7 +1,6 @@
 package sources
 
 import (
-	"fmt"
 	"github.com/g-portal/metadata-server/pkg/config"
 	"log"
 	"sync"
@@ -20,18 +19,19 @@ func Load() ([]Source, error) {
 	list := make([]Source, 0)
 	cfg := config.GetConfig()
 	for id := range registration {
-		if ds, ok := registration[id]; ok {
-			if err := ds.Initialize(cfg.Sources.GetConfig(id)); err != nil {
+		if source, ok := registration[id]; ok {
+			if err := source.Initialize(cfg.Sources.GetConfig(id)); err != nil {
 				log.Printf("Failed to initialize datasource %s: %v", id, err)
+
 				continue
 			}
 
-			list = append(list, ds)
+			list = append(list, source)
 		}
 	}
 
 	if len(list) == 0 {
-		return nil, fmt.Errorf("no datasources found")
+		return nil, ErrNoDatasourceFound
 	}
 
 	return list, nil

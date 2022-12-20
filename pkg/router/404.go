@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
+	"net/http"
 )
 
 const NotFoundResponse = `<?xml version="1.0" encoding="iso-8859-1"?>
@@ -18,7 +19,7 @@ const NotFoundResponse = `<?xml version="1.0" encoding="iso-8859-1"?>
 </html>`
 
 func NotFoundRequest(c *gin.Context) {
-	c.Render(404, render.Data{
+	c.Render(http.StatusNotFound, render.Data{
 		Data:        []byte(NotFoundResponse),
 		ContentType: "text/html",
 	})

@@ -7,6 +7,8 @@ import (
 )
 
 // GetRoutes returns a map of all routes that are available for the given metadata.
+//
+//nolint:cyclop // This function is not complex, it just has a lot of cases.
 func (m Metadata) GetRoutes() Routes {
 	routes := make(Routes)
 	if m.InstanceID != "" {
@@ -26,13 +28,18 @@ func (m Metadata) GetRoutes() Routes {
 
 	if len(m.PublicKeys) > 0 {
 		for id, publicKey := range m.PublicKeys {
-			routes.registerVersionedOpenStackMetadataRoute(fmt.Sprintf("/public-keys/%s", id), render.String{Format: string(ssh.MarshalAuthorizedKey(publicKey))})
+			routes.registerVersionedOpenStackMetadataRoute(
+				fmt.Sprintf("/public-keys/%s", id),
+				render.String{Format: string(ssh.MarshalAuthorizedKey(publicKey))},
+			)
 		}
 	}
 
 	if m.UserData != nil {
-		routes.registerVersionedOpenStackRoute("/user_data", render.Data{Data: m.UserData})
-		routes.registerVersionedOpenStackMetadataRoute("/user-data", render.Data{Data: m.UserData})
+		routes.registerVersionedOpenStackRoute(
+			"/user_data", render.Data{Data: m.UserData})
+		routes.registerVersionedOpenStackMetadataRoute("/user-data",
+			render.Data{Data: m.UserData})
 	}
 
 	if m.Password != nil && *m.Password != "" {
@@ -40,18 +47,22 @@ func (m Metadata) GetRoutes() Routes {
 	}
 
 	if len(m.Interfaces) > 0 {
-		routes.registerVersionedOpenStackRoute("/network_data.json", m.OpenStackNetworkData())
+		routes.registerVersionedOpenStackRoute("/network_data.json",
+			m.OpenStackNetworkData())
 	}
 
 	if m.VendorData != nil {
-		routes.registerVersionedOpenStackRoute("/vendor_data.json", m.OpenStackVendorData(m.VendorData))
+		routes.registerVersionedOpenStackRoute("/vendor_data.json",
+			m.OpenStackVendorData(m.VendorData))
 	}
 
 	if m.VendorData2 != nil {
-		routes.registerVersionedOpenStackRoute("/vendor_data2.json", m.OpenStackVendorData(m.VendorData))
+		routes.registerVersionedOpenStackRoute("/vendor_data2.json",
+			m.OpenStackVendorData(m.VendorData))
 	}
 
-	routes.registerVersionedOpenStackRoute("/meta_data.json", m.OpenStackMetaData())
+	routes.registerVersionedOpenStackRoute("/meta_data.json",
+		m.OpenStackMetaData())
 
 	return routes
 }

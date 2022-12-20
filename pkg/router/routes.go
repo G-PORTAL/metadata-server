@@ -1,7 +1,6 @@
 package router
 
 import (
-	"errors"
 	"github.com/g-portal/metadata-server/pkg/sources"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -9,6 +8,7 @@ import (
 
 // LoadRoutes Registers all routes on *gin.Engine inclusive the metadata catch-all rute.
 func LoadRoutes(r *gin.Engine) {
+	r.GET("/metrics")
 	r.GET("/healthz", func(c *gin.Context) {
 		if sourceList, ok := c.MustGet("datasources").([]sources.Source); ok {
 			sources := make([]string, 0)
@@ -20,7 +20,7 @@ func LoadRoutes(r *gin.Engine) {
 				"datasources": sources,
 			})
 		} else {
-			_ = c.Error(errors.New("no datasource found"))
+			_ = c.Error(sources.ErrNoDatasourceFound)
 		}
 	})
 

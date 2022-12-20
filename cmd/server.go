@@ -20,15 +20,14 @@ func main() {
 		log.Fatalf("Failed to load datasource: %v", err)
 	}
 
-	r := gin.Default()
-	r.Use(gin.Recovery())
-	r.Use(func(ctx *gin.Context) {
+	engine := gin.Default()
+	engine.Use(gin.Recovery())
+	engine.Use(func(ctx *gin.Context) {
 		ctx.Set("datasources", datasourceList)
 	})
 
-	router.LoadRoutes(r)
-	err = r.Run(config.GetConfig().Listen)
-	if err != nil {
+	router.LoadRoutes(engine)
+	if err = engine.Run(config.GetConfig().Listen); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
