@@ -7,14 +7,22 @@ import (
 	"net/http"
 )
 
+// LoadRoutes Registers all routes on *gin.Engine inclusive the metadata catch-all rute.
 func LoadRoutes(r *gin.Engine) {
 	r.GET("/healthz", func(c *gin.Context) {
-		if ds, ok := c.MustGet("datasource").(sources.Source); ok {
+		if sourceList, ok := c.MustGet("datasources").([]sources.Source); ok {
+			sources := make([]string, 0)
+			for _, source := range sourceList {
+				sources = append(sources, source.Type())
+			}
+
 			c.JSON(http.StatusOK, gin.H{
-				"datasource": ds.Type(),
+				"datasources": sources,
 			})
 		} else {
 			_ = c.Error(errors.New("no datasource found"))
 		}
 	})
+
+	r.NoRoute(MetadataRequest)
 }

@@ -15,7 +15,7 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	datasource, err := sources.Load()
+	datasourceList, err := sources.Load()
 	if err != nil {
 		log.Fatalf("Failed to load datasource: %v", err)
 	}
@@ -23,7 +23,7 @@ func main() {
 	r := gin.Default()
 	r.Use(gin.Recovery())
 	r.Use(func(ctx *gin.Context) {
-		ctx.Set("datasource", datasource)
+		ctx.Set("datasources", datasourceList)
 	})
 
 	router.LoadRoutes(r)

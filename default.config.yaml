@@ -2,5 +2,6 @@
 
 listen: 0.0.0.0:80
 
-source:
-  type: gpcloud
+sources:
+  - type: gpcloud
+    priority: 10

@@ -4,3 +4,6 @@
 
 # Generated code
 /pkg/proto/
+
+# Config
+/config.yaml
