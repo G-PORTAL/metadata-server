@@ -31,27 +31,27 @@ func (m Metadata) GetRoutes() Routes {
 	}
 
 	if m.UserData != nil {
-		routes.registerOpenStackRoute("/user_data", render.Data{Data: m.UserData})
+		routes.registerVersionedOpenStackRoute("/user_data", render.Data{Data: m.UserData})
 		routes.registerVersionedOpenStackMetadataRoute("/user-data", render.Data{Data: m.UserData})
 	}
 
 	if m.Password != nil && *m.Password != "" {
-		routes.registerOpenStackRoute("/password", render.String{Format: *m.Password})
+		routes.registerVersionedOpenStackRoute("/password", render.String{Format: *m.Password})
 	}
 
 	if len(m.Interfaces) > 0 {
-		routes.registerOpenStackRoute("/network_data.json", m.OpenStackNetworkData())
+		routes.registerVersionedOpenStackRoute("/network_data.json", m.OpenStackNetworkData())
 	}
 
 	if m.VendorData != nil {
-		routes.registerOpenStackRoute("/vendor_data.json", m.OpenStackVendorData(m.VendorData))
+		routes.registerVersionedOpenStackRoute("/vendor_data.json", m.OpenStackVendorData(m.VendorData))
 	}
 
 	if m.VendorData2 != nil {
-		routes.registerOpenStackRoute("/vendor_data2.json", m.OpenStackVendorData(m.VendorData))
+		routes.registerVersionedOpenStackRoute("/vendor_data2.json", m.OpenStackVendorData(m.VendorData))
 	}
 
-	routes.registerOpenStackRoute("/meta_data.json", m.OpenStackMetaData())
+	routes.registerVersionedOpenStackRoute("/meta_data.json", m.OpenStackMetaData())
 
 	return routes
 }

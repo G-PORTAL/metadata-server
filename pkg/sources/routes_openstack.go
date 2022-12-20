@@ -17,7 +17,7 @@ func (r Routes) registerVersionedOpenStackMetadataRoute(suffix string, g render.
 }
 
 // RegisterOpenStackRoute registers a OpenStack route for the given path and render
-func (r Routes) registerOpenStackRoute(suffix string, g render.Render) {
+func (r Routes) registerVersionedOpenStackRoute(suffix string, g render.Render) {
 	for _, version := range openStackVersions {
 		url := fmt.Sprintf("/openstack/%s/%s", version, strings.TrimPrefix(suffix, "/"))
 		r[url] = g
