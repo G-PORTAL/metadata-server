@@ -5,7 +5,7 @@ run:
 
   issue-exit-code: 1
 
-  tests: true
+  tests: false
 
   skip-dirs:
     - pkg/proto

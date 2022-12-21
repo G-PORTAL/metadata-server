@@ -1,6 +1,7 @@
 package router
 
 import (
+	"errors"
 	"github.com/g-portal/metadata-server/pkg/sources"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,6 +11,12 @@ func MetadataRequest(c *gin.Context) {
 	// Get first matching metadata response from registered sources.
 	metadata, err := sources.GetMetadata(c.Request)
 	if err != nil {
+		if errors.Is(err, sources.ErrNoMatchingMetadata) {
+			NotFoundRequest(c)
+
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
