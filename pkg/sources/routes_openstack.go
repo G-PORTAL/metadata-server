@@ -7,7 +7,7 @@ import (
 )
 
 func getOpenStackVersions() []string {
-	return []string{"2021-03-23", "2009-04-04", "2021-03-23", "latest"}
+	return []string{"2021-03-23", "2009-04-04", "latest"}
 }
 
 // RegisterVersionedOpenStackMetadataRoute registers a OpenStack meta-data route for the given path and render.

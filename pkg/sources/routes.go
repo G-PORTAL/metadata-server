@@ -61,8 +61,10 @@ func (m Metadata) GetRoutes() Routes {
 			m.OpenStackVendorData(m.VendorData))
 	}
 
-	routes.registerVersionedOpenStackRoute("/meta_data.json",
-		m.OpenStackMetaData())
+	if len(routes) > 0 {
+		routes.registerVersionedOpenStackRoute("/meta_data.json",
+			m.OpenStackMetaData())
+	}
 
 	return routes
 }

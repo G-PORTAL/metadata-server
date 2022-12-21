@@ -60,6 +60,7 @@ func (s *ClientAuthenticationService) refresh(ctx context.Context) error {
 		return fmt.Errorf("failed to get token: %w", err)
 	}
 	s.expireTime = time.Now().Add(time.Second * time.Duration(s.jwt.ExpiresIn-RefreshGracePeriod))
+
 	return nil
 }
 

@@ -75,7 +75,8 @@ func (m Metadata) OpenStackMetaData() render.JSON {
 		Hostname:    m.PublicHostname,
 		Name:        m.LocalHostname,
 		LaunchIndex: 0,
-		RandomSeed:  m.InstanceID, // TODO: do something
+		//nolint:godox // implement later
+		RandomSeed: m.InstanceID, // TODO: do something
 	}
 
 	for keyID, key := range m.PublicKeys {

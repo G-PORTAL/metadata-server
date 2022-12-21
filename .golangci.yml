@@ -24,6 +24,7 @@ linters:
     - ireturn
     - exhaustruct
     - exhaustivestruct
+    - wsl
 
 linters-settings:
   varnamelen:
@@ -32,6 +33,7 @@ linters-settings:
       - c *gin.Context
       - r *http.Request
       - r *gin.Engine
+      - i int
   funlen:
     lines: 100
   tagliatelle:

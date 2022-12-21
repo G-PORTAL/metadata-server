@@ -22,6 +22,7 @@ func GetMetadata(r *http.Request) (*Metadata, error) {
 		"source": ip.String(),
 	}).Inc()
 
+	//nolint:godox // implement later
 	// TODO: Sort sources by priority
 	for _, source := range registration {
 		if result, err := source.GetMetadata(ip); err == nil && result != nil {
