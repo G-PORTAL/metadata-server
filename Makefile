@@ -1,6 +1,6 @@
 
 build:
-	go build cmd/server.go
+	docker build -t gportal/metadata-server:latest .
 
 lint:
 	golangci-lint run
