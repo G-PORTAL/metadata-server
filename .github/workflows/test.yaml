@@ -3,12 +3,13 @@ name: Testing application
 on: [push, pull_request]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: bufbuild/buf-setup-action@v1
+      - run: make proto
 
       - name: Set up Go
         uses: actions/setup-go@v3
