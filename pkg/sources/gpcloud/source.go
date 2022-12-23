@@ -6,6 +6,7 @@ import (
 	"fmt"
 	grpcclient "github.com/g-portal/metadata-server/pkg/grpc"
 	"github.com/g-portal/metadata-server/pkg/keycloak"
+	cloudv1 "github.com/g-portal/metadata-server/pkg/proto/gpcloud/api/cloud/v1"
 	metadatav1 "github.com/g-portal/metadata-server/pkg/proto/gpcloud/api/metadata/v1"
 	"github.com/g-portal/metadata-server/pkg/sources"
 	"golang.org/x/crypto/ssh"
@@ -124,6 +125,34 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 		Interfaces:       nicList,
 		Routes:           routeList,
 	}, nil
+}
+
+func (s *Source) ReportLog(message sources.ReportMessage) error {
+	level := cloudv1.ServerLogLevelType_SERVER_LOG_LEVEL_TYPE_INFO
+	switch message.Level {
+	case sources.ReportMessageLevelTypeError:
+		level = cloudv1.ServerLogLevelType_SERVER_LOG_LEVEL_TYPE_ERROR
+	case sources.ReportMessageLevelTypeWarning:
+		level = cloudv1.ServerLogLevelType_SERVER_LOG_LEVEL_TYPE_WARNING
+	case sources.ReportMessageLevelTypeInfo:
+		break
+	}
+
+	report := &cloudv1.MetadataReport{
+		IpAddress: message.IP.String(),
+		Message:   message.Message,
+		Timestamp: grpcclient.TimeToTimestamp(message.Timestamp),
+		Level:     level,
+	}
+	_, err := s.GetMetadataClient().Report(context.Background(), &metadatav1.ReportRequest{
+		Report: report,
+	})
+
+	if err != nil {
+		return fmt.Errorf("failed to report metadata: %w", err)
+	}
+
+	return nil
 }
 
 func init() {

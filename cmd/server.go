@@ -6,7 +6,6 @@ import (
 	"github.com/g-portal/metadata-server/pkg/sources"
 	_ "github.com/g-portal/metadata-server/pkg/sources/gpcloud"
 	"github.com/gin-gonic/gin"
-
 	"log"
 )
 
@@ -15,6 +14,7 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
+	cfg := config.GetConfig()
 	datasourceList, err := sources.Load()
 	if err != nil {
 		log.Fatalf("Failed to load datasource: %v", err)
@@ -27,7 +27,7 @@ func main() {
 	})
 
 	router.LoadRoutes(engine)
-	if err = engine.Run(config.GetConfig().Listen); err != nil {
+	if err = engine.Run(cfg.Listen); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

@@ -12,7 +12,7 @@ type Routes map[string]render.Render
 
 // GetMetadata Try to find a valid metadata response by the registered sources.
 func GetMetadata(r *http.Request) (*Metadata, error) {
-	ip := getServer(r)
+	ip := GetServer(r)
 	if ip == nil {
 		return nil, ErrFailedGetRemoteAddress
 	}
@@ -33,7 +33,7 @@ func GetMetadata(r *http.Request) (*Metadata, error) {
 	return nil, ErrNoMatchingMetadata
 }
 
-func getServer(r *http.Request) net.IP {
+func GetServer(r *http.Request) net.IP {
 	ipAddress, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		return nil

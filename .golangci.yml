@@ -34,6 +34,7 @@ linters-settings:
       - r *http.Request
       - r *gin.Engine
       - i int
+      - t time.Time
   funlen:
     lines: 100
   tagliatelle:

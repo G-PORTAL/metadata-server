@@ -9,6 +9,7 @@ import (
 // LoadRoutes Registers all routes on *gin.Engine inclusive the metadata catch-all rute.
 func LoadRoutes(r *gin.Engine) {
 	r.GET("/metrics")
+	r.POST("/reporting/cloud-init", CloudInitReport)
 	r.GET("/healthz", func(c *gin.Context) {
 		if sourceList, ok := c.MustGet("datasources").([]sources.Source); ok {
 			sources := make([]string, 0)

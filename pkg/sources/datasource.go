@@ -9,4 +9,5 @@ type Source interface {
 	Type() string
 	Initialize(cfg SourceConfig) error
 	GetMetadata(ip net.IP) (*Metadata, error)
+	ReportLog(log ReportMessage) error
 }
