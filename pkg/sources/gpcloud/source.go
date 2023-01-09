@@ -120,6 +120,7 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 		UserData:         resp.Metadata.UserData,
 		VendorData:       resp.Metadata.VendorData,
 		VendorData2:      resp.Metadata.VendorData_2,
+		Username:         resp.Metadata.Username,
 		Password:         resp.Metadata.Password,
 		PublicKeys:       sshKeys,
 		Interfaces:       nicList,

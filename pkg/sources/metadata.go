@@ -56,7 +56,8 @@ type Metadata struct {
 	VendorData       []byte                   `json:"vendor_data"`
 	VendorData2      []byte                   `json:"vendor_data_2"`
 	PublicKeys       map[string]ssh.PublicKey `json:"public_keys"`
-	Password         *string                  `json:"password"`
+	Username         *string                  `json:"omitempty"`
+	Password         *string                  `json:"omitempty"`
 	Interfaces       []MetadataInterface      `json:"interfaces"`
 	Routes           []MetadataRoute          `json:"routes"`
 }

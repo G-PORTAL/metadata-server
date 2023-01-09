@@ -17,6 +17,8 @@ type Metadata struct {
 	RandomSeed       string                  `json:"random_seed"`
 	ProjectID        string                  `json:"project_id"`
 	Devices          []interface{}           `json:"devices"`
+	AdminUsername    *string                 `json:"admin_username,omitempty"`
+	AdminPassword    *string                 `json:"admin_pass,omitempty"`
 }
 
 type VendorData struct {

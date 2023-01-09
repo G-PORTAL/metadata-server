@@ -80,13 +80,22 @@ func (m Metadata) OpenStackMetaData() render.JSON {
 	}
 
 	for keyID, key := range m.PublicKeys {
+		sshKey := strings.TrimSpace(string(ssh.MarshalAuthorizedKey(key)))
 		metadata.Keys = append(metadata.Keys, openstack.MetadataKeyDefinition{
 			Name: keyID,
 			Type: "ssh",
-			Data: string(ssh.MarshalAuthorizedKey(key)),
+			Data: sshKey,
 		})
 
-		metadata.PublicKeys[keyID] = string(ssh.MarshalAuthorizedKey(key))
+		metadata.PublicKeys[keyID] = sshKey
+	}
+
+	if m.Username != nil {
+		metadata.AdminUsername = m.Username
+	}
+
+	if m.Password != nil {
+		metadata.AdminPassword = m.Password
 	}
 
 	if m.ProjectID != nil {
