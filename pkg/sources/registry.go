@@ -18,10 +18,14 @@ func Load() ([]Source, error) {
 
 	list := make([]Source, 0)
 	cfg := config.GetConfig()
-	for id := range registration {
-		if source, ok := registration[id]; ok {
-			if err := source.Initialize(cfg.Sources.GetConfig(id)); err != nil {
-				log.Printf("Failed to initialize datasource %s: %v", id, err)
+	for sourceID := range registration {
+		if !cfg.Sources.ShouldLoad(sourceID) {
+			continue
+		}
+
+		if source, ok := registration[sourceID]; ok {
+			if err := source.Initialize(cfg.Sources.GetConfig(sourceID)); err != nil {
+				log.Printf("Failed to initialize datasource %s: %v", sourceID, err)
 
 				continue
 			}

@@ -20,6 +20,10 @@ func main() {
 		log.Fatalf("Failed to load datasource: %v", err)
 	}
 
+	if !cfg.Debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	engine := gin.Default()
 	engine.Use(gin.Recovery())
 	engine.Use(func(ctx *gin.Context) {

@@ -26,7 +26,19 @@ func (s Sources) GetConfig(t SourceType) map[string]interface{} {
 	return make(map[string]interface{})
 }
 
+func (s Sources) ShouldLoad(t SourceType) bool {
+	for _, source := range s {
+		if source.Type == t {
+			return true
+		}
+	}
+
+	return false
+}
+
 type Config struct {
+	Debug bool `yaml:"debug"`
+
 	Listen string `yaml:"listen"`
 
 	ForwardedForWhitelist NetworkList `yaml:"forwardedForWhitelist"`

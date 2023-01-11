@@ -55,7 +55,6 @@ func (s *ClientAuthenticationService) refresh(ctx context.Context) error {
 		ClientID:     &s.config.clientID,
 		ClientSecret: &s.config.clientSecret,
 		GrantType:    gocloak.StringP("client_credentials"),
-		Audience:     gocloak.StringP("dasdsdadasd"),
 	}); err != nil {
 		return fmt.Errorf("failed to get token: %w", err)
 	}

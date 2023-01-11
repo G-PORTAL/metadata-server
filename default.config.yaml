@@ -1,13 +1,15 @@
 ---
 
-# HTTP listen address for metadata server
-listen: 169.254.169.254:80
+# Debug logging enabled
+debug: true
 
-# Whitelist source IP addresses for X-Forwarded-For header
+# HTTP listen address for metadata server
+listen: 0.0.0.0:8080
+
+# Whitelist source IP addresses to detect the server IP
+# from the X-Forwarded-For header - useful when running behind a proxy.
 forwardedForWhitelist:
   - 0.0.0.0/0
 
 # Enabled sources
-sources:
-  - type: gpcloud
-    priority: 10
+sources: []
