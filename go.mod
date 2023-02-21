@@ -10,7 +10,7 @@ require (
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.14.0
-	golang.org/x/crypto v0.4.0
+	golang.org/x/crypto v0.6.0
 	google.golang.org/grpc v1.53.0
 )
 
