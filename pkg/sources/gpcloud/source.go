@@ -1,13 +1,14 @@
 package gpcloud
 
 import (
+	"buf.build/gen/go/gportal/gportal-cloud/grpc/go/gpcloud/api/metadata/v1/metadatav1grpc"
+	cloudv1 "buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go/gpcloud/api/cloud/v1"
+	metadatav1 "buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go/gpcloud/api/metadata/v1"
 	"context"
 	"crypto/tls"
 	"fmt"
 	grpcclient "github.com/g-portal/metadata-server/pkg/grpc"
 	"github.com/g-portal/metadata-server/pkg/keycloak"
-	cloudv1 "github.com/g-portal/metadata-server/pkg/proto/gpcloud/api/cloud/v1"
-	metadatav1 "github.com/g-portal/metadata-server/pkg/proto/gpcloud/api/metadata/v1"
 	"github.com/g-portal/metadata-server/pkg/sources"
 	"golang.org/x/crypto/ssh"
 	"google.golang.org/grpc"
@@ -51,8 +52,8 @@ func (s *Source) Initialize(cfg sources.SourceConfig) error {
 	return nil
 }
 
-func (s *Source) GetMetadataClient() metadatav1.MetadataServiceClient {
-	return metadatav1.NewMetadataServiceClient(s.grpcClient)
+func (s *Source) GetMetadataClient() metadatav1grpc.MetadataServiceClient {
+	return metadatav1grpc.NewMetadataServiceClient(s.grpcClient)
 }
 
 func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {

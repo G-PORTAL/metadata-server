@@ -5,8 +5,5 @@ build:
 lint:
 	golangci-lint run
 
-proto:
-	buf generate buf.build/gportal/gportal-cloud
-
 test:
 	go test -v ./...
