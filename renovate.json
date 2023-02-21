@@ -7,6 +7,16 @@
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "groupName": "buf-build packages",
+      "groupSlug": "buf-build",
+      "matchDatasources": [
+        "go"
+      ],
+      "matchPackagePrefixes": [
+        "buf.build/gen/go/gportal/gportal-cloud"
+      ]
     }
   ]
 }
