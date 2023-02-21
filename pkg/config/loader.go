@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/go-yaml/yaml"
+	"gopkg.in/yaml.v3"
 	"os"
 )
 
@@ -21,7 +21,7 @@ func ReloadConfig() error {
 		return err
 	}
 
-	if err = yaml.UnmarshalStrict(content, cfg); err != nil {
+	if err = yaml.Unmarshal(content, cfg); err != nil {
 		return errInvalidConfig
 	}
 
