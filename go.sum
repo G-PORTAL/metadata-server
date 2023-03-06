@@ -4,12 +4,16 @@ buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.2.0-20230221141041-366e58b4c12
 buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.2.0-20230221141041-366e58b4c120.4/go.mod h1:yum1rDb/vi83mAZ9BBoD+vqJ7X7yyVoju7geb2u1/Z8=
 buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.2.0-20230223112228-cd4f66a3e46a.4 h1:jGgUDNVSjLdpHmxpEzaWhxIeIdTYlfOGitOUzGjv25c=
 buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.2.0-20230223112228-cd4f66a3e46a.4/go.mod h1:nJk4ekUN24UiW3R/So/+45UPh+pVMg26SiUmYNvHL7E=
+buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.2.0-20230302123312-d5229cf616e9.4 h1:mLZgw43UCfuL7GGs900EWZfnyKAajodD7gpXui4D9tE=
+buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.2.0-20230302123312-d5229cf616e9.4/go.mod h1:YH1Q4zbt6NeXBwJApOr8mxRcvOg2+IXN5mtKs6jr4LM=
 buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230208182656-350dfd4cb1f2.4 h1:7ZG7uk/teLLmm7Ah356OXPq3pdylXeWl4RtRRYkRXbQ=
 buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230208182656-350dfd4cb1f2.4/go.mod h1:i79EhSPYzSdyy1aIb7EYriGb79IEL5zCkRfFb++j0vo=
 buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230221141041-366e58b4c120.4 h1:87z6EI2sHHodLB2OJ5ZKjOyuRyW1HPlFnYvwoKGqaGw=
 buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230221141041-366e58b4c120.4/go.mod h1:i79EhSPYzSdyy1aIb7EYriGb79IEL5zCkRfFb++j0vo=
 buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230223112228-cd4f66a3e46a.4 h1:zN9j3xgJFYvYtrtXxM927EodkGj3FDLmtDFUg8KtTKY=
 buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230223112228-cd4f66a3e46a.4/go.mod h1:i79EhSPYzSdyy1aIb7EYriGb79IEL5zCkRfFb++j0vo=
+buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230302123312-d5229cf616e9.4 h1:QZXp5fUNtlKIL1rFJs8eBARt5+PJDFoaB2RH03b7tJ8=
+buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.28.1-20230302123312-d5229cf616e9.4/go.mod h1:i79EhSPYzSdyy1aIb7EYriGb79IEL5zCkRfFb++j0vo=
 buf.build/gen/go/grpc-ecosystem/grpc-gateway/grpc/go v1.2.0-20221127060915-a1ecdc58eccd.4/go.mod h1:v21IrbBWGrrmlSRbpxfUwXW7F1/vE3hqAhwlWrhPHCc=
 buf.build/gen/go/grpc-ecosystem/grpc-gateway/protocolbuffers/go v1.28.1-20221127060915-a1ecdc58eccd.4/go.mod h1:92ejKVTiuvnKoAtRlpJpIxKfloI935DDqhs0NCRx+KM=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
