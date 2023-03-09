@@ -46,10 +46,14 @@ docker run --rm \
 
 #### cloud-init
 
-Example `/etc/cloud.cfg.d/01-metadata.cfg` configuration to use the metadata server with cloud-init.
+For getting the metadata server to work with Cloud-Init on bare metal you need at least version `23.1.1`
+of cloud-init installed on the machine.
+
+Example `/etc/cloud.cfg.d/01-metadata.cfg` configuration to use the metadata server with cloud-init. It
+is important that only OpenStack is configured as datasource to bypass the platform checks of Cloud-Init.
 
 ```yaml
-datasource_list: [ OpenStack, None ]
+datasource_list: [ OpenStack ]
 
 reporting:
   metadata:
