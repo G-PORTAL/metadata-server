@@ -1,16 +1,16 @@
 package grpc
 
 import (
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
 
-func TimeToTimestamp(t time.Time) *timestamp.Timestamp {
+func TimeToTimestamp(t time.Time) *timestamppb.Timestamp {
 	if t.IsZero() {
 		return nil
 	}
 
-	return &timestamp.Timestamp{
+	return &timestamppb.Timestamp{
 		Seconds: t.Unix(),
 		Nanos:   0,
 	}
