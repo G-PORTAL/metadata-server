@@ -3,7 +3,7 @@ package keycloak
 import (
 	"context"
 	"fmt"
-	"github.com/Nerzal/gocloak/v12"
+	"github.com/Nerzal/gocloak/v13"
 	"log"
 	"sync"
 	"time"
