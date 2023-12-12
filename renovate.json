@@ -1,22 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
-  ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
-    },
-    {
-      "groupName": "buf-build packages",
-      "groupSlug": "buf-build",
-      "matchDatasources": [
-        "go"
-      ],
-      "matchPackagePrefixes": [
-        "buf.build/gen/go/gportal/gportal-cloud"
-      ]
-    }
+    "github>G-PORTAL/gpcore-renovate"
   ]
 }
