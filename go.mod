@@ -6,6 +6,7 @@ require (
 	buf.build/gen/go/gportal/gportal-cloud/grpc/go v1.3.0-20231109125057-5a1e78133adc.2
 	buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go v1.31.0-20231109125057-5a1e78133adc.2
 	github.com/Nerzal/gocloak/v12 v12.0.0
+	github.com/Nerzal/gocloak/v13 v13.8.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/prometheus/client_golang v1.17.0
 	golang.org/x/crypto v0.15.0
