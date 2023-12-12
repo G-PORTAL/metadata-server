@@ -1,9 +1,9 @@
-package gpcloud
+package gpcore
 
 import (
-	"buf.build/gen/go/gportal/gportal-cloud/grpc/go/gpcloud/api/metadata/v1/metadatav1grpc"
-	cloudv1 "buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go/gpcloud/api/cloud/v1"
-	metadatav1 "buf.build/gen/go/gportal/gportal-cloud/protocolbuffers/go/gpcloud/api/metadata/v1"
+	"buf.build/gen/go/gportal/gpcore/grpc/go/gpcore/api/metadata/v1/metadatav1grpc"
+	cloudv1 "buf.build/gen/go/gportal/gpcore/protocolbuffers/go/gpcore/api/cloud/v1"
+	metadatav1 "buf.build/gen/go/gportal/gpcore/protocolbuffers/go/gpcore/api/metadata/v1"
 	"context"
 	"crypto/tls"
 	"fmt"
@@ -17,7 +17,7 @@ import (
 	"net"
 )
 
-const Type = "gpcloud"
+const Type = "gpcore"
 
 type Source struct {
 	cfg        sources.SourceConfig
