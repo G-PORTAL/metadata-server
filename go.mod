@@ -3,18 +3,19 @@ module github.com/g-portal/metadata-server
 go 1.19
 
 require (
-	buf.build/gen/go/gportal/gpcore/grpc/go v1.3.0-20240405102527-5536c9b4c6fd.2
-	buf.build/gen/go/gportal/gpcore/protocolbuffers/go v1.33.0-20240405102527-5536c9b4c6fd.1
+	buf.build/gen/go/gportal/gpcore/grpc/go v1.3.0-20240506112553-74f750072c05.3
+	buf.build/gen/go/gportal/gpcore/protocolbuffers/go v1.34.1-20240506112553-74f750072c05.1
 	github.com/Nerzal/gocloak/v13 v13.8.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/prometheus/client_golang v1.17.0
 	golang.org/x/crypto v0.17.0
-	google.golang.org/grpc v1.60.0
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/grpc v1.61.2
+	google.golang.org/protobuf v1.34.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.34.1-20240401165935-b983156c5e99.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
