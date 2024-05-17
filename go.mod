@@ -3,8 +3,8 @@ module github.com/g-portal/metadata-server
 go 1.19
 
 require (
-	buf.build/gen/go/gportal/gpcore/grpc/go v1.3.0-20240506112553-74f750072c05.3
-	buf.build/gen/go/gportal/gpcore/protocolbuffers/go v1.34.1-20240506112553-74f750072c05.1
+	buf.build/gen/go/gportal/gpcore/grpc/go v1.3.0-20240517000739-1159d7bec4aa.3
+	buf.build/gen/go/gportal/gpcore/protocolbuffers/go v1.34.1-20240517000739-1159d7bec4aa.1
 	github.com/Nerzal/gocloak/v13 v13.8.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/prometheus/client_golang v1.17.0
