@@ -41,7 +41,7 @@ func (s *Source) Initialize(cfg sources.SourceConfig) error {
 		return fmt.Errorf("failed to create client authentication service: %w", err)
 	}
 
-	if s.grpcClient, err = grpc.Dial(cfg.GetString("grpc_host"),
+	if s.grpcClient, err = grpc.NewClient(cfg.GetString("grpc_host"),
 		grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{MinVersion: tls.VersionTLS13})),
 		grpc.WithPerRPCCredentials(grpcclient.KeycloakClientAuthenticationAuth{
 			Service: clientAuth,
@@ -66,27 +66,28 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 	}
 
 	sshKeys := make(map[string]ssh.PublicKey)
-	for _, key := range resp.Metadata.SshKeys {
-		sshPublicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(key.PublicKey))
+	for _, key := range resp.GetMetadata().GetSshKeys() {
+		sshPublicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(key.GetPublicKey()))
 		if err != nil {
 			log.Printf("Failed to parse SSH key: %s", err)
 
 			continue
 		}
 
-		sshKeys[key.Id] = sshPublicKey
+		sshKeys[key.GetId()] = sshPublicKey
 	}
 
 	nicList := make([]sources.MetadataInterface, 0)
 	routeList := make([]sources.MetadataRoute, 0)
-	for i, networkInterface := range resp.Metadata.Interfaces {
+	for i, networkInterface := range resp.GetMetadata().GetInterfaces() {
 		var gateway *net.IP
 		if networkInterface.Ipv4.Gateway != nil {
-			gw := net.ParseIP(*networkInterface.Ipv4.Gateway)
+			gw := net.ParseIP(networkInterface.GetIpv4().GetGateway())
 			gateway = &gw
 		}
 
-		ip, net, err := net.ParseCIDR(fmt.Sprintf("%s/%v", networkInterface.Ipv4.IpAddress, networkInterface.Ipv4.Prefix))
+		ip, network, err := net.ParseCIDR(fmt.Sprintf("%s/%v",
+			networkInterface.GetIpv4().GetIpAddress(), networkInterface.GetIpv4().GetPrefix()))
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse CIDR: %w", err)
 		}
@@ -97,13 +98,13 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 			IPv6:       false,
 			Type:       sources.MetadataSubnetTypeStatic,
 			Address:    &ip,
-			Network:    net,
+			Network:    network,
 			Gateway:    gateway,
-			DNSServers: resp.Metadata.Dns.Nameservers,
+			DNSServers: resp.GetMetadata().GetDns().GetNameservers(),
 		})
 
 		nicList = append(nicList, sources.MetadataInterface{
-			MacAddress: networkInterface.MacAddress,
+			MacAddress: networkInterface.GetMacAddress(),
 			Name:       fmt.Sprintf("eth%d", i),
 			Type:       sources.InterfaceTypePhysical,
 			Subnets:    subnets,
@@ -111,18 +112,29 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 		})
 	}
 
+	var username *string
+	var password *string
+	if resp.GetMetadata().GetUsername() != "" {
+		newUsername := resp.GetMetadata().GetUsername()
+		username = &newUsername
+	}
+	if resp.GetMetadata().GetPassword() != "" {
+		newPassword := resp.GetMetadata().GetPassword()
+		password = &newPassword
+	}
+
 	return &sources.Metadata{
 		ProjectID:        &resp.Metadata.ProjectId,
-		InstanceID:       resp.Metadata.InstanceId,
-		InstanceType:     resp.Metadata.Flavour,
-		PublicHostname:   resp.Metadata.Hostname,
-		LocalHostname:    resp.Metadata.Hostname,
+		InstanceID:       resp.GetMetadata().GetInstanceId(),
+		InstanceType:     resp.GetMetadata().GetFlavour(),
+		PublicHostname:   resp.GetMetadata().GetHostname(),
+		LocalHostname:    resp.GetMetadata().GetHostname(),
 		AvailabilityZone: &resp.Metadata.AvailabilityZone,
-		UserData:         resp.Metadata.UserData,
-		VendorData:       resp.Metadata.VendorData,
-		VendorData2:      resp.Metadata.VendorData_2,
-		Username:         resp.Metadata.Username,
-		Password:         resp.Metadata.Password,
+		UserData:         resp.GetMetadata().GetUserData(),
+		VendorData:       resp.GetMetadata().GetVendorData(),
+		VendorData2:      resp.GetMetadata().GetVendorData_2(),
+		Username:         username,
+		Password:         password,
 		PublicKeys:       sshKeys,
 		Interfaces:       nicList,
 		Routes:           routeList,

@@ -1,7 +1,6 @@
 package sources
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin/render"
 	"golang.org/x/crypto/ssh"
 )
@@ -29,7 +28,7 @@ func (m Metadata) GetRoutes() Routes {
 	if len(m.PublicKeys) > 0 {
 		for id, publicKey := range m.PublicKeys {
 			routes.registerVersionedOpenStackMetadataRoute(
-				fmt.Sprintf("/public-keys/%s", id),
+				"/public-keys/"+id,
 				render.String{Format: string(ssh.MarshalAuthorizedKey(publicKey))},
 			)
 		}

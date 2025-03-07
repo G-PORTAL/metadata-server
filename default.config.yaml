@@ -11,5 +11,9 @@ listen: 0.0.0.0:8080
 forwardedForWhitelist:
   - 0.0.0.0/0
 
+# An optional whitelist of IP addresses that are
+# allowed to access the metadata server. If not set, all requests are allowed.
+whitelist: []
+
 # Enabled sources
 sources: []

@@ -25,6 +25,7 @@ linters:
     - exhaustruct
     - exhaustivestruct
     - wsl
+    - depguard
 
 linters-settings:
   varnamelen:

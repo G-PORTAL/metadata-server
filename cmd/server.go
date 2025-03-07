@@ -29,6 +29,15 @@ func main() {
 	engine.Use(func(ctx *gin.Context) {
 		ctx.Set("datasources", datasourceList)
 	})
+	engine.Use(func(ctx *gin.Context) {
+		if len(cfg.Whitelist) == 0 ||
+			cfg.Whitelist.Contains(sources.GetServer(ctx.Request)) {
+			ctx.Next()
+		} else {
+			router.ForbiddenRequest(ctx)
+			ctx.Abort()
+		}
+	})
 
 	router.LoadRoutes(engine)
 	if err = engine.Run(cfg.Listen); err != nil {

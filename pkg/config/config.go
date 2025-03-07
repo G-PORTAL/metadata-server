@@ -45,6 +45,8 @@ type Config struct {
 
 	MetricsWhitelist NetworkList `yaml:"metricsWhitelist"`
 
+	Whitelist NetworkList `yaml:"whitelist"`
+
 	Sources Sources `yaml:"sources"`
 }
 

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
@@ -10,7 +11,7 @@ const defaultConfigPath = "/etc/metadata-server/config.yaml"
 
 var cfg *Config
 
-var errInvalidConfig = fmt.Errorf("invalid config")
+var errInvalidConfig = errors.New("invalid config")
 
 func ReloadConfig() error {
 	cfg = &Config{}
