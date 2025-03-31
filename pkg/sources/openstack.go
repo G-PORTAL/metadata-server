@@ -4,6 +4,7 @@ import (
 	"github.com/g-portal/metadata-server/pkg/openstack"
 	"github.com/gin-gonic/gin/render"
 	"golang.org/x/crypto/ssh"
+	"net"
 	"strings"
 )
 
@@ -15,11 +16,27 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 	}
 
 	for _, metadataInterface := range m.Interfaces {
-		config.Links = append(config.Links, openstack.Link{
-			ID:                 metadataInterface.Name,
-			Type:               openstack.LinkTypePhysical,
-			EthernetMacAddress: metadataInterface.MacAddress,
-		})
+		linkType := openstack.LinkTypePhysical
+		if metadataInterface.Type == InterfaceTypeVLAN {
+			linkType = openstack.LinkTypeVlan
+		}
+
+		link := openstack.Link{
+			ID:   metadataInterface.Name,
+			Type: linkType,
+		}
+
+		if linkType == openstack.LinkTypePhysical {
+			link.EthernetMacAddress = metadataInterface.MacAddress
+		}
+
+		if linkType == openstack.LinkTypeVlan {
+			link.VlanMacAddress = &metadataInterface.MacAddress
+			link.VlanID = metadataInterface.VlanID
+			link.VlanLink = metadataInterface.VlanLink
+		}
+
+		config.Links = append(config.Links, link)
 
 		for _, subnet := range metadataInterface.Subnets {
 			for _, dnsServer := range subnet.DNSServers {
@@ -48,6 +65,19 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 					Netmask: "0.0.0.0",
 					Gateway: ip,
 				})
+			}
+
+			// Add matching routes for the network interface where the gateway is in the subnet
+			for _, route := range m.Routes {
+				if route.Gateway != nil &&
+					subnet.Network.Contains(net.ParseIP(*route.Gateway)) {
+					network.Routes = append(network.Routes, openstack.Route{
+						Network: route.Network,
+						Netmask: route.Netmask,
+						Gateway: *route.Gateway,
+						Metric:  route.Metric,
+					})
+				}
 			}
 
 			config.Networks = append(config.Networks, network)

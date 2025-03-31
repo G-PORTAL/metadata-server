@@ -8,7 +8,7 @@ type NetworkList []string
 
 func (n NetworkList) Contains(ip net.IP) bool {
 	for _, whitelist := range n {
-		if _, net, err := net.ParseCIDR(whitelist); err == nil && net.Contains(ip) {
+		if _, ipNet, err := net.ParseCIDR(whitelist); err == nil && (ipNet.Contains(ip) || ipNet.String() == "0.0.0.0/0") {
 			return true
 		}
 	}

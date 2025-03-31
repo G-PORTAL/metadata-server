@@ -30,6 +30,10 @@ func ReloadConfig() error {
 }
 
 func GetConfig() *Config {
+	if cfg == nil {
+		_ = ReloadConfig()
+	}
+
 	return cfg
 }
 
