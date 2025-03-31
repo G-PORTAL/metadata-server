@@ -45,6 +45,9 @@ func Register(t config.SourceType, source Source) {
 	mtx.Lock()
 	defer mtx.Unlock()
 
-	log.Printf("Registering datasource type %s.", t)
-	registration[t] = source
+	cfg := config.GetConfig()
+	if cfg.Sources.ShouldLoad(t) {
+		log.Printf("Registering datasource type %s.", t)
+		registration[t] = source
+	}
 }

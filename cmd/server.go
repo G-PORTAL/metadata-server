@@ -5,6 +5,7 @@ import (
 	"github.com/g-portal/metadata-server/pkg/router"
 	"github.com/g-portal/metadata-server/pkg/sources"
 	_ "github.com/g-portal/metadata-server/pkg/sources/gpcore"
+	_ "github.com/g-portal/metadata-server/pkg/sources/nocloud"
 	"github.com/gin-gonic/gin"
 	"log"
 )

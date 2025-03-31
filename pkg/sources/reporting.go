@@ -15,10 +15,10 @@ const (
 )
 
 type ReportMessage struct {
-	IP        net.IP
-	Message   string
-	Timestamp time.Time
-	Level     ReportMessageLevelType
+	IP        net.IP                 `json:"ip_address"`
+	Message   string                 `json:"message"`
+	Timestamp time.Time              `json:"timestamp"`
+	Level     ReportMessageLevelType `json:"level"`
 }
 
 type CloudInitEventType string

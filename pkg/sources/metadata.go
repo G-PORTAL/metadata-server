@@ -37,12 +37,16 @@ type MetadataInterface struct {
 	Type       InterfaceType    `json:"type"`
 	Subnets    []MetadataSubnet `json:"subnets"`
 	AcceptRA   *bool            `json:"accept-ra,omitempty"` //nolint:tagliatelle // cloud-init metadata requirement
+	
+	VlanID   *int    `json:"vlan_id,omitempty"`   //nolint:tagliatelle // cloud-init metadata requirement
+	VlanLink *string `json:"vlan_link,omitempty"` //nolint:tagliatelle // cloud-init metadata requirement
 }
 
 type MetadataRoute struct {
 	Network string  `json:"network"`
 	Netmask string  `json:"netmask"`
 	Gateway *string `json:"gateway"`
+	Metric  *int    `json:"metric,omitempty"`
 }
 
 type Metadata struct {
