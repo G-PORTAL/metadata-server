@@ -38,7 +38,7 @@ func (s *Source) Initialize(cfg sources.SourceConfig) error {
 	return nil
 }
 
-func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
+func (s *Source) GetMetadata(ip net.IP, client sources.MetadataClient) (*sources.Metadata, error) {
 	// meta-data response
 	metadata, err := s.fetchMetadata(ip)
 	if err != nil {
@@ -162,11 +162,12 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 	}
 
 	return &sources.Metadata{
-		InstanceID:    metadata.InstanceID,
-		LocalHostname: metadata.LocalHostname,
-		UserData:      userData,
-		Routes:        routeList,
-		Interfaces:    interfaceList,
+		InstanceID:     metadata.InstanceID,
+		LocalHostname:  metadata.LocalHostname,
+		UserData:       userData,
+		Routes:         routeList,
+		Interfaces:     interfaceList,
+		MetadataClient: client,
 	}, nil
 }
 
@@ -198,7 +199,7 @@ func (s *Source) ReportLog(message sources.ReportMessage) error {
 	if resp.StatusCode != http.StatusCreated {
 		return fmt.Errorf("invalid http status code returned: %d", resp.StatusCode)
 	}
-	
+
 	return nil
 }
 
