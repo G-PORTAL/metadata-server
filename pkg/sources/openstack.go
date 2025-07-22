@@ -60,11 +60,7 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 
 			if subnet.Gateway != nil {
 				ip := subnet.Gateway.String()
-				network.Routes = append(network.Routes, openstack.Route{
-					Network: "0.0.0.0",
-					Netmask: "0.0.0.0",
-					Gateway: ip,
-				})
+				network.Gateway = &ip
 			}
 
 			// Add matching routes for the network interface where the gateway is in the subnet
