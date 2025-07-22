@@ -68,4 +68,11 @@ type Network struct {
 	IPAddress *string     `json:"ip_address,omitempty"`
 	Netmask   *string     `json:"netmask,omitempty"`
 	Routes    []Route     `json:"routes,omitempty"`
+
+	// Gateway sets the gateway properly even if this flag officially is not
+	// supported if you look into the schema file:
+	//   https://docs.openstack.org/nova/latest/_downloads/9119ca7ac90aa2990e762c08baea3a36/network_data.json
+	// But Cloud-Init does seem to support it, see cloud-init documentation for OpenStack:
+	//   https://github.com/canonical/cloud-init/blob/main/cloudinit/sources/helpers/openstack.py#L576
+	Gateway *string `json:"gateway,omitempty"`
 }
