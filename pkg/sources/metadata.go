@@ -37,7 +37,7 @@ type MetadataInterface struct {
 	Type       InterfaceType    `json:"type"`
 	Subnets    []MetadataSubnet `json:"subnets"`
 	AcceptRA   *bool            `json:"accept-ra,omitempty"` //nolint:tagliatelle // cloud-init metadata requirement
-	
+
 	VlanID   *int    `json:"vlan_id,omitempty"`   //nolint:tagliatelle // cloud-init metadata requirement
 	VlanLink *string `json:"vlan_link,omitempty"` //nolint:tagliatelle // cloud-init metadata requirement
 }
@@ -64,4 +64,5 @@ type Metadata struct {
 	Password         *string                  `json:"password,omitempty"`
 	Interfaces       []MetadataInterface      `json:"interfaces"`
 	Routes           []MetadataRoute          `json:"routes"`
+	MetadataClient   MetadataClient           `json:"metadata_client"`
 }

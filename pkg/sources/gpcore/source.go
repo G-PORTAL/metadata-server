@@ -56,7 +56,7 @@ func (s *Source) GetMetadataClient() metadatav1grpc.MetadataServiceClient {
 	return metadatav1grpc.NewMetadataServiceClient(s.grpcClient)
 }
 
-func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
+func (s *Source) GetMetadata(ip net.IP, client sources.MetadataClient) (*sources.Metadata, error) {
 	resp, err := s.GetMetadataClient().GetMetadata(context.Background(), &metadatav1.GetMetadataRequest{
 		IpAddress: ip.String(),
 	})
@@ -138,6 +138,7 @@ func (s *Source) GetMetadata(ip net.IP) (*sources.Metadata, error) {
 		PublicKeys:       sshKeys,
 		Interfaces:       nicList,
 		Routes:           routeList,
+		MetadataClient:   client,
 	}, nil
 }
 

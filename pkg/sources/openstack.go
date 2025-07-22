@@ -60,7 +60,18 @@ func (m Metadata) OpenStackNetworkData() render.JSON {
 
 			if subnet.Gateway != nil {
 				ip := subnet.Gateway.String()
-				network.Gateway = &ip
+
+				// cloud-init requires the gateway to be set in the network interface
+				if m.MetadataClient == MetadataClientCloudInit {
+					network.Gateway = &ip
+					// as example CloudBase-Init requires the gateway to be set in the routes
+				} else {
+					network.Routes = append(network.Routes, openstack.Route{
+						Network: "0.0.0.0",
+						Netmask: "0.0.0.0",
+						Gateway: ip,
+					})
+				}
 			}
 
 			// Add matching routes for the network interface where the gateway is in the subnet
