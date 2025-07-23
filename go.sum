@@ -1,7 +1,7 @@
 buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250219170025-d39267d9df8f.1 h1:Y0dvIjy09SvloaRbMLTH//k1qDzWcxNm8uBrCwp75ug=
 buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250219170025-d39267d9df8f.1/go.mod h1:eOqrCVUfhh7SLo00urDe/XhJHljj0dWMZirS0aX7cmc=
-buf.build/gen/go/gportal/gpcore/grpc/go v1.5.1-20250128133116-6735b85bd101.2 h1:laQuSpJE/9d7x+7qeAUnfg/HUBNPYlxwVyUMUCP0WMY=
-buf.build/gen/go/gportal/gpcore/grpc/go v1.5.1-20250128133116-6735b85bd101.2/go.mod h1:LN4WadWLwRzhiIFJ+NTDcGDVTnluImEBgmEvw9TBpng=
+buf.build/gen/go/gportal/gpcore/grpc/go v1.5.1-20250328120542-e27aa6ca5ccf.2 h1:y9sDMoIX4s1NpCiA4Wi6h4nNgloNNtkdLYOZRZZjmmg=
+buf.build/gen/go/gportal/gpcore/grpc/go v1.5.1-20250328120542-e27aa6ca5ccf.2/go.mod h1:pC9FurNDTpSC4OViMAJwybw1gJgQ6FyQEGaic6dqCoc=
 buf.build/gen/go/gportal/gpcore/protocolbuffers/go v1.36.5-20250128133116-6735b85bd101.1 h1:0iL2ckGJT/zxewwlP1ki+DrMtVQU2J0vJ+SMAEkI/I4=
 buf.build/gen/go/gportal/gpcore/protocolbuffers/go v1.36.5-20250128133116-6735b85bd101.1/go.mod h1:GW+mubQ57dwZ8/QwZMP1bL7jDZdxdHV3FIcVCXR/oJA=
 github.com/Nerzal/gocloak/v13 v13.9.0 h1:YWsJsdM5b0yhM2Ba3MLydiOlujkBry4TtdzfIzSVZhw=
