@@ -138,6 +138,7 @@ func (s *Source) GetMetadata(ip net.IP, client sources.MetadataClient) (*sources
 		PublicKeys:       sshKeys,
 		Interfaces:       nicList,
 		Routes:           routeList,
+		Tags:             resp.GetMetadata().GetTags(),
 		MetadataClient:   client,
 	}, nil
 }

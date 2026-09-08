@@ -139,6 +139,12 @@ func (m Metadata) OpenStackMetaData() render.JSON {
 		metadata.ProjectID = *m.ProjectID
 	}
 
+	// Node tags are exposed as the OpenStack "meta" object so cloud-init and
+	// other OpenStack-aware tooling pick them up as instance metadata.
+	if len(m.Tags) > 0 {
+		metadata.Meta = m.Tags
+	}
+
 	if m.AvailabilityZone != nil {
 		metadata.AvailabilityZone = *m.AvailabilityZone
 	}

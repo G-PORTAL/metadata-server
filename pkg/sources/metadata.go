@@ -64,5 +64,6 @@ type Metadata struct {
 	Password         *string                  `json:"password,omitempty"`
 	Interfaces       []MetadataInterface      `json:"interfaces"`
 	Routes           []MetadataRoute          `json:"routes"`
+	Tags             map[string]string        `json:"tags,omitempty"`
 	MetadataClient   MetadataClient           `json:"metadata_client"`
 }
